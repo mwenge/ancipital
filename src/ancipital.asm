@@ -1,3 +1,21 @@
+; This is the reverse-engineered source code for the game 'Ancipital' written by Jeff Minter in 1984.
+;
+; The code in this file was created by disassembling a binary of the game released into
+; the public domain by Jeff Minter in 2019.
+;
+; The original code from which this source is derived is the copyright of Jeff Minter.
+;
+; The original home of this file is at: https://github.com/mwenge/ancipital
+;
+; To the extent to which any copyright may apply to the act of disassembling and reconstructing
+; the code from its binary, the author disclaims copyright to this source code.  In place of
+; a legal notice, here is a blessing:
+;
+;    May you do good and not evil.
+;    May you find forgiveness for yourself and forgive others.
+;    May you share freely, never taking more than you give.
+;
+; (Note: I ripped this part from the SQLite licence! :) )
 ;
 ; **** ZP ABSOLUTE ADRESSES **** 
 ;
@@ -115,11 +133,14 @@ ROM_SCNKEY = $FF9F
 ROM_CHROUT = $FFD2
 
 
-        * = $0800
+* = $0800
 
-;---------------------------------------------------------------------------------
-; p0800   
-;---------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------------------------
+; SYS 16384 (LaunchGame)
+; This launches the program from address $4000, i.e. LaunchGame.
+;-----------------------------------------------------------------------------------------------------
+; $9E = SYS
+; $31,$36,$33,$38,$34,$00 = 16384 ($4000 in hex)
 p0800   
         .BYTE $00,$0B,$08,$00,$00,$9E,$31,$36
         .BYTE $33,$38,$34,$00,$00
@@ -127,8 +148,7 @@ p0800
 ; s080D
 ;---------------------------------------------------------------------------------
 s080D
-        
-                LDA #$93
+        LDA #$93
         JSR ROM_CHROUT ;$FFD2 - output character                 
         LDA #$8E
         JSR ROM_CHROUT ;$FFD2 - output character                 
@@ -194,9 +214,9 @@ b0823   LDA screenLinesLoPtrArray + $01,X
 .include "charset.asm"
 .include "sprites.asm"
 ;-------------------------------------------------------------------------
-; s4000
+; LaunchGame
 ;-------------------------------------------------------------------------
-s4000
+LaunchGame
         LDA #$00
         STA $D020    ;Border Color
         STA $D021    ;Background Color 0
@@ -1534,7 +1554,11 @@ b4AD7   INX
         STA fC390
         JMP j5D99
 
-j4AE4   LDA #>p26
+;---------------------------------------------------------------------------------
+; j4AE4   
+;---------------------------------------------------------------------------------
+j4AE4   
+        LDA #>p26
         STA currentYPosition
         LDA #<p26
         STA currentXPosition
